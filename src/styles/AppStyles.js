@@ -14,7 +14,8 @@ export const Wrapper = styled.div`
   background: #2b344b;
   margin: 0 auto;
   height: 100%;
-  padding: 15px 0;
+  padding: 15px 0 50px 0;
+  position: relative;
 `;
 
 export const HeaderWrapper = styled.div`

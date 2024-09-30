@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { LOCALSTORAGE_STATE } from "../constants";
 
 const useWordSelection = (words) => {
+  const savedGuessedWords =
+    JSON.parse(localStorage.getItem(LOCALSTORAGE_STATE.guessedWords)) || [];
+
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [selectedLetters, setSelectedLetters] = useState([]);
-  const [guessedWords, setGuessedWords] = useState([]);
+  const [guessedWords, setGuessedWords] = useState(savedGuessedWords);
 
   const handleMouseDown = (letter, index) => {
     setIsMouseDown(true);
@@ -40,10 +44,26 @@ const useWordSelection = (words) => {
   const handleMouseUp = () => {
     setIsMouseDown(false);
     const formedWord = selectedLetters.map((item) => item.letter).join("");
-    if (words.includes(formedWord)) {
-      setGuessedWords((prevGuessed) => [...prevGuessed, formedWord]);
+    if (words.includes(formedWord) && !guessedWords.includes(formedWord)) {
+      setGuessedWords((prevGuessed) => {
+        const newGuessedWords = [...prevGuessed, formedWord];
+        localStorage.setItem(LOCALSTORAGE_STATE.guessedWords, JSON.stringify(newGuessedWords));
+        return newGuessedWords;
+      });
     }
     setSelectedLetters([]);
+  };
+
+  useEffect(() => {
+    const savedGuessedWords = JSON.parse(localStorage.getItem(LOCALSTORAGE_STATE.guessedWords));
+    if (savedGuessedWords) {
+      setGuessedWords(savedGuessedWords);
+    }
+  }, []);
+
+  const clearWordSelectionState = () => {
+    setGuessedWords([]);
+    localStorage.setItem(LOCALSTORAGE_STATE.guessedWords, JSON.stringify([]));
   };
 
   return {
@@ -53,6 +73,7 @@ const useWordSelection = (words) => {
     handleMouseEnter,
     handleMouseUp,
     isMouseDown,
+    clearWordSelectionState,
   };
 };
 

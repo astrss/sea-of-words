@@ -1,13 +1,17 @@
 import useLevels from "./hooks/useLevels";
 import useWordSelection from "./hooks/useWordSelection";
+import useTabAndModalManager from "./hooks/useTabAndModalManager";
 
 import WordsDisplay from "./components/WordsDisplay";
 import LetterSelector from "./components/LetterSelector";
+import LevelCompleteModal from "./components/LevelCompleteModal";
+import InactiveTabModal from "./components/InactiveTabModal";
 
 import * as Styled from "./styles/AppStyles";
 
 const App = () => {
   const { currentLevel, levelNumber, goToNextLevel } = useLevels();
+
   const {
     guessedWords,
     handleMouseDown,
@@ -15,11 +19,29 @@ const App = () => {
     handleMouseUp,
     selectedLetters,
     isMouseDown,
+    clearWordSelectionState,
   } = useWordSelection(currentLevel.words);
+
+  const {
+    showLevelCompleteModal,
+    showInactiveTabModal,
+    closeLevelCompleteModal,
+    handleRefresh,
+  } = useTabAndModalManager(
+    guessedWords,
+    currentLevel.words.length,
+    goToNextLevel,
+    clearWordSelectionState
+  );
 
   return (
     <Styled.ProjectWrapper onMouseUp={handleMouseUp} onTouchEnd={handleMouseUp}>
       <Styled.Wrapper>
+        {showLevelCompleteModal && (
+          <LevelCompleteModal onClose={closeLevelCompleteModal} />
+        )}
+
+        {showInactiveTabModal && <InactiveTabModal onRefresh={handleRefresh} />}
         <Styled.HeaderWrapper>
           <Styled.LevelName>Уровень: {levelNumber}</Styled.LevelName>
           <WordsDisplay
@@ -35,7 +57,6 @@ const App = () => {
           selectedLetters={selectedLetters}
           isMouseDown={isMouseDown}
         />
-        <button onClick={goToNextLevel}>Next Level</button>
       </Styled.Wrapper>
     </Styled.ProjectWrapper>
   );
