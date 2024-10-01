@@ -47,8 +47,8 @@ export const Letter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 89.94px;
-  height: 89.94px;
+  width: 79.94px;
+  height: 79.94px;
   font-size: 57px;
   font-weight: 700;
   color: #58595b;

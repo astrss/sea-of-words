@@ -1,2 +1,2 @@
 export const MOBILE_CIRCLE_RADIUS = 110;
-export const DESKTOP_CIRCLE_RADIUS = 147;
+export const DESKTOP_CIRCLE_RADIUS = 137;
