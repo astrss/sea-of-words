@@ -7,21 +7,19 @@ const useTabAndModalManager = (
   onNextLevel,
   clearWordSelectionState
 ) => {
-  const [isActiveTab, setIsActiveTab] = useState(true);
   const [showLevelCompleteModal, setShowLevelCompleteModal] = useState(false);
   const [showInactiveTabModal, setShowInactiveTabModal] = useState(false);
 
   useEffect(() => {
     const handleStorageChange = (event) => {
-      if (event.key === "activeTab" && event.newValue !== "true") {
-        setIsActiveTab(false);
+      if (event.key === "activeTab" && !event.newValue.startsWith("true")) {
         setShowInactiveTabModal(true);
       }
     };
 
     window.addEventListener("storage", handleStorageChange);
 
-    localStorage.setItem(LOCALSTORAGE_STATE.activeTab, "true");
+    localStorage.setItem(LOCALSTORAGE_STATE.activeTab, `true-${Date.now()}`);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
@@ -46,12 +44,11 @@ const useTabAndModalManager = (
   };
 
   const handleRefresh = () => {
-    localStorage.setItem(LOCALSTORAGE_STATE.activeTab, "true");
+    localStorage.setItem(LOCALSTORAGE_STATE.activeTab, `true-${Date.now()}`);
     window.location.reload();
   };
 
   return {
-    isActiveTab,
     showLevelCompleteModal,
     showInactiveTabModal,
     closeLevelCompleteModal,
