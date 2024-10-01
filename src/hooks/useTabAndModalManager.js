@@ -12,7 +12,7 @@ const useTabAndModalManager = (
 
   useEffect(() => {
     const handleStorageChange = (event) => {
-      if (event.key === "activeTab" && !event.newValue.startsWith("true")) {
+      if (event.key === "activeTab" && event.newValue.startsWith("true")) {
         setShowInactiveTabModal(true);
       }
     };
